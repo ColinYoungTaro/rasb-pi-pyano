@@ -1,5 +1,5 @@
 import numpy
-import RPI.GPIO as GPIO
+import RPi.GPIO as GPIO
 import time
 
 # finger 的IO接口
@@ -49,10 +49,10 @@ class HardWareController:
             return 10 
 
     def note_press(self,note):
-        self.PWM[self.note2finger(note)].ChangeDutyCycle(press[self.note2finger(note)])
+        self.PWM[self.note2finger(note.abs_int_note)].ChangeDutyCycle(press[self.note2finger(note)])
 
     def note_release(self,note):
-        self.PWM[self.note2finger(note)].ChangeDutyCycle(back[self.note2finger(note)])
+        self.PWM[self.note2finger(note.abs_int_note)].ChangeDutyCycle(back[self.note2finger(note)])
 
     # 析构函数
     def dispose(self):
