@@ -110,7 +110,7 @@ class CameraDialog(QDialog):
 
 class CameraInitThread(QtCore.QThread):
 
-    ready_signal = QtCore.Signal(str)
+    ready_signal = QtCore.pyqtSignal(str)
 
     def __init__(self) -> None:
         super(CameraInitThread,self).__init__()
@@ -137,7 +137,7 @@ class CameraInitThread(QtCore.QThread):
 
 
 class UploadThread(QtCore.QThread):
-    ready_signal = QtCore.Signal(str)
+    ready_signal = QtCore.pyqtSignal(str)
     def __init__(self) -> None:
         super(UploadThread,self).__init__()
         self.upload_service = CameraService()
