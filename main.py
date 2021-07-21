@@ -107,7 +107,7 @@ class AnimationCanvas(QLabel):
     def update_blocks_position(self,blocks):
         for index,block in enumerate(blocks):
             block : NoteBlock
-            block.moveTop(block.y() + GlobalConfig.drop_speed_pixels_per_frame())
+            block.moveTop(int(block.y() + GlobalConfig.drop_speed_pixels_per_frame()))
             if block.state == BlockState.FLOAT:
                 if block.bottom() > 400:
                     block.state = BlockState.TOUCHING

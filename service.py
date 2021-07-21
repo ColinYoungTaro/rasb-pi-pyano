@@ -1,6 +1,7 @@
+from control import HardWareController
 from PyQt5.QtWidgets import QProgressBar, QPushButton
 from note import Note
-from PyQt5.QtCore import QProcess, QRect
+from PyQt5.QtCore import QProcess, QRect, QThread
 from GlobalConfig import GlobalConfig, MusicConfig
 import os
 import cv2
@@ -10,6 +11,28 @@ class BlockState:
     FLOAT = 0
     TOUCHING = 1
     LEFT = 2
+
+class IO_STATE:
+    PRESS = 1
+    RELEASE = 0
+
+class HardwareThread(QThread):
+    def __init__(self) -> None:
+        super().__init__()
+        self.hardware_controller = HardWareController()
+        self.state = [IO_STATE.RELEASE] * 11 
+        self.next_state = [IO_STATE.RELEASE] * 11 
+
+    def run(self):
+        while True:
+            self.msleep(30)
+
+    def press_note(self,note:Note):
+        self.hardware_controller.note_press(note)
+
+    def release_note(self,note:Note):
+        self.hardware_controller.note_release(note)
+            
 
 class NoteBlock(QRect):
     def __init__(self,*args, **kwargs) -> None:
@@ -23,6 +46,8 @@ class BlockAnimationService:
     def __init__(self) -> None:
         self.progress = 0
         self.blocks = []
+        self.hardware_thread = HardwareThread()
+        self.hardware_thread.start()
     
     def create_blocks(self,notes):
         self.blocks = []
@@ -56,9 +81,12 @@ class BlockAnimationService:
     def on_note_rect_touch(self,blk:NoteBlock):
         print(f"{blk.note} 按下")
         self.progress += 1
+        self.hardware_thread.press_note(blk.note)
         
     def on_note_rect_leave(self,blk:NoteBlock):
         print(f"{blk.note} 抬起")
+        self.hardware_thread.release_note(blk.note)
+
 
     def on_init(self):
         pass 
@@ -71,6 +99,10 @@ class MusicItemService:
     def chord_list(self):
         fileList = os.listdir(MusicConfig.prefix)
         return fileList
+
+
+
+
 
 class PlayerService:
     def __init__(self):

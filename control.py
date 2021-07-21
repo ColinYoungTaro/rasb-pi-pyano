@@ -24,6 +24,8 @@ class HardWareController:
         for i in FINGER:
             GPIO.setup(i,GPIO.OUT,initial=GPIO.LOW)
             self.PWM.append(GPIO.PWM(i,freq))
+
+        self.init_pwm()
     
     def init_pwm(self):
         for index,pwm in enumerate(self.PWM):
