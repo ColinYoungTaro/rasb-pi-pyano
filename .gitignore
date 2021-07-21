@@ -1,0 +1,9 @@
+__pycache__
+.qt*
+1/*
+env
+*.psd
+main.pyproject
+main.pyproject.user
+tst.pyproject
+model

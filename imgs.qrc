@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/">
+        <file>assets/pause_idle.png</file>
+        <file>assets/pause_selected.png</file>
+        <file>assets/play_idle.png</file>
+        <file>assets/play_selected.png</file>
+        <file>assets/next_idle.png</file>
+        <file>assets/next_selected.png</file>
+        <file>assets/prev_idle.png</file>
+        <file>assets/prev_selected.png</file>
+        <file>assets/upload_idle.png</file>
+        <file>assets/upload_selected.png</file>
+        <file>assets/subWidget.png</file>
+        <file>assets/ui.png</file>
+    </qresource>
+</RCC>
