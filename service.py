@@ -1,6 +1,6 @@
-from PySide2.QtWidgets import QProgressBar, QPushButton
+from PyQt5.QtWidgets import QProgressBar, QPushButton
 from note import Note
-from PySide2.QtCore import QProcess, QRect
+from PyQt5.QtCore import QProcess, QRect
 from GlobalConfig import GlobalConfig, MusicConfig
 import os
 import cv2

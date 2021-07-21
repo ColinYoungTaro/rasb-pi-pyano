@@ -1,8 +1,8 @@
 
 from service import CameraService, PlayerService
-from PySide2 import QtCore, QtGui
-import PySide2
-from PySide2.QtWidgets import QDialog
+from PyQt5 import QtCore, QtGui
+import PyQt5
+from PyQt5.QtWidgets import QDialog
 from subWidget import Ui_Dialog as SubDialog
 import cv2
 

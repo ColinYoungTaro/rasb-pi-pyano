@@ -6,12 +6,12 @@ from note import Music, Note
 from GlobalConfig import GlobalConfig, MusicConfig
 import sys
 import typing
-from PySide2 import QtGui
-import PySide2
-from PySide2.QtCore import QRect, QTime, QTimer, Qt
-from PySide2.QtGui import QColor, QFont, QLinearGradient, QPaintEvent, QPainter, QPen, QPixmap
+from PyQt5 import QtGui
+import PyQt5
+from PyQt5.QtCore import QRect, QTime, QTimer, Qt
+from PyQt5.QtGui import QColor, QFont, QLinearGradient, QPaintEvent, QPainter, QPen, QPixmap
 
-from PySide2.QtWidgets import QAbstractItemView, QApplication, QDialog, QLabel,QListWidgetItem , QMainWindow, QProgressBar, QScroller, QWidget
+from PyQt5.QtWidgets import QAbstractItemView, QApplication, QDialog, QLabel,QListWidgetItem , QMainWindow, QProgressBar, QScroller, QWidget
 from pyanoUI import Ui_Form as Window
 import rsc
 # Piano Label 
@@ -33,13 +33,13 @@ class PianoCanvas(QLabel):
         self.pressed_key = [False] * 21 
 
 
-    def paintEvent(self, arg__1: PySide2.QtGui.QPaintEvent) -> None:
+    def paintEvent(self, arg__1: PyQt5.QtGui.QPaintEvent) -> None:
         super().paintEvent(arg__1)
         painter = QPainter()
         painter.begin(self)
         painter.setBrush(QColor(0x202020))
         painter.drawRect(0,0,700,100)
-        painter.setPen(None)
+        # painter.setPen(None)
         for i in range(21):
             white_board = QRect(5+i*33,0,30,100)
             line = QLinearGradient(white_board.topLeft(),white_board.bottomRight())
@@ -65,7 +65,7 @@ class PianoCanvas(QLabel):
 
 
 class AnimationCanvas(QLabel):
-    def __init__(self,parent: typing.Optional[PySide2.QtWidgets.QWidget] = None) -> None:
+    def __init__(self,parent: typing.Optional[PyQt5.QtWidgets.QWidget] = None) -> None:
         super().__init__(parent)
         self.setGeometry(0,0,700,500)
         self.current_time = 0
