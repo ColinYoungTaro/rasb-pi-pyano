@@ -1,5 +1,6 @@
+from note import Note
 import numpy
-import RPi.GPIO as GPIO
+# import RPi.GPIO as GPIO
 import time
 
 # finger 的IO接口
@@ -17,45 +18,54 @@ back =  [7.5,8.5 ,8   ,7.5 ,7   ,7.5,8   ,7.75,7.05,6.25,7.5]
 
 class HardWareController:
     # 初始化弹琴机械臂的IO口
-    def __init__(self):
-        self.PWM = []
-        self.base = 5
+    PWM = []
+    base = 5
+    def init():
         GPIO.setmode(GPIO.BOARD)
         for i in FINGER:
             GPIO.setup(i,GPIO.OUT,initial=GPIO.LOW)
-            self.PWM.append(GPIO.PWM(i,freq))
-
-        self.init_pwm()
-    
-    def init_pwm(self):
-        for index,pwm in enumerate(self.PWM):
+            HardWareController.PWM.append(GPIO.PWM(i,freq))
+        for index,pwm in enumerate(HardWareController.PWM):
             pwm.start(0)
-
-
+    
+    @staticmethod
     # 设置弹琴机械臂的基准
-    def set_base(self,base):
-        self.base = base
+    def set_base(base):
+        HardWareController.base = base
 
-    def get_base(self):
-        return self.base
+    def add_base():
+        if HardWareController.base < 14:
+            HardWareController.base += 1 
+
+    def minus_base():
+        if HardWareController.base > 0:
+            HardWareController.base -= 1 
+
+    def get_base():
+        return HardWareController.base
 
     # 根据当前的base将需要弹奏的note转化为第几个按键在按
-    def note2finger(self,note:int):
-        if note >= self.base and note <= self.base + 3:
-            return note - self.base + 1
-        elif note <= self.base + 7:
-            return note - self.base + 2
+    def note2finger(note:int):
+        if note >= HardWareController.base and note <= HardWareController.base + 3:
+            return note - HardWareController.base + 1
+        elif note <= HardWareController.base + 7:
+            return note - HardWareController.base + 2
         else:
             return 10 
 
-    def note_press(self,note):
-        self.PWM[self.note2finger(note.abs_int_note)].ChangeDutyCycle(press[self.note2finger(note)])
+    def note_press(note:Note):
+        HardWareController.PWM[HardWareController.note2finger(note.abs_int_note)].ChangeDutyCycle(press[HardWareController.note2finger(note.abs_int_note)])
 
-    def note_release(self,note):
-        self.PWM[self.note2finger(note.abs_int_note)].ChangeDutyCycle(back[self.note2finger(note)])
+    def note_release(note:Note):
+        HardWareController.PWM[HardWareController.note2finger(note.abs_int_note)].ChangeDutyCycle(back[HardWareController.note2finger(note.abs_int_note)])
+
+    def note_idle(note:Note):
+        HardWareController.PWM[HardWareController.note2finger(note.abs_int_note)].ChangeDutyCycle(0)
 
     # 析构函数
-    def dispose(self):
-        for pwm in self.PWM:
+    def dispose():
+        for pwm in HardWareController.PWM:
             pwm.stop()
         GPIO.cleanup() 
+
+

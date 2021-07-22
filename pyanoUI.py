@@ -94,7 +94,7 @@ class Ui_Form(object):
         self.prevButton.setText("")
         self.prevButton.setObjectName("prevButton")
         self.progressBar = QtWidgets.QProgressBar(self.frame)
-        self.progressBar.setGeometry(QtCore.QRect(250, 566, 571, 5))
+        self.progressBar.setGeometry(QtCore.QRect(250, 566, 400, 5))
         self.progressBar.setStyleSheet("QProgressBar::chunk {\n"
 "   background-color: #11A4F0;\n"
 "}")
@@ -110,7 +110,7 @@ class Ui_Form(object):
 "}")
         self.songLabel.setObjectName("songLabel")
         self.uploadButton = QtWidgets.QPushButton(self.frame)
-        self.uploadButton.setGeometry(QtCore.QRect(870, 528, 48, 48))
+        self.uploadButton.setGeometry(QtCore.QRect(690, 528, 48, 48))
         self.uploadButton.setStyleSheet("#uploadButton{\n"
 "    background-color:transparent;\n"
 "    border-image:url(:/assets/upload_idle.png);\n"
@@ -122,6 +122,35 @@ class Ui_Form(object):
 "}")
         self.uploadButton.setText("")
         self.uploadButton.setObjectName("uploadButton")
+        self.baseLabel = QtWidgets.QLabel(self.frame)
+        self.baseLabel.setGeometry(QtCore.QRect(900, 539, 31, 31))
+        self.baseLabel.setStyleSheet("\n"
+"font-family:\'consolas\',\'等线\';\n"
+"font-size:25px;\n"
+"color:white;\n"
+"text-align:center\n"
+"")
+        self.baseLabel.setObjectName("baseLabel")
+        self.addButton = QtWidgets.QPushButton(self.frame)
+        self.addButton.setGeometry(QtCore.QRect(940, 539, 32, 32))
+        self.addButton.setStyleSheet("    background-color:transparent;\n"
+"    border-image:url(:/assets/plus.png);\n"
+"    outline:0px;")
+        self.addButton.setText("")
+        self.addButton.setObjectName("addButton")
+        self.minusButton = QtWidgets.QPushButton(self.frame)
+        self.minusButton.setGeometry(QtCore.QRect(861, 539, 32, 32))
+        self.minusButton.setStyleSheet("    background-color:transparent;\n"
+"    border-image:url(:/assets/minus.png);\n"
+"    outline:0px;")
+        self.minusButton.setText("")
+        self.minusButton.setObjectName("minusButton")
+        self.songLabel_3 = QtWidgets.QLabel(self.frame)
+        self.songLabel_3.setGeometry(QtCore.QRect(790, 537, 61, 31))
+        self.songLabel_3.setStyleSheet("    font-family:\'consolas\',\'等线\';\n"
+"    font-size:25px;\n"
+"    color:white;")
+        self.songLabel_3.setObjectName("songLabel_3")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -137,3 +166,5 @@ class Ui_Form(object):
         item.setText(_translate("Form", "you"))
         self.listWidget.setSortingEnabled(__sortingEnabled)
         self.songLabel.setText(_translate("Form", "歌名"))
+        self.baseLabel.setText(_translate("Form", "5"))
+        self.songLabel_3.setText(_translate("Form", "偏移"))

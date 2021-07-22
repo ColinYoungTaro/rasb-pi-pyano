@@ -1,4 +1,5 @@
 
+from control import HardWareController
 from camera_dialog import CameraDialog, Dialog
 from subWidget import Ui_Dialog
 from service import BlockAnimationService, BlockState, MusicItemService, NoteBlock, PlayerService
@@ -178,7 +179,19 @@ class UIWindow(Window):
         self.songLabel.setText("")
 
         self.button_style_pause()
-    
+
+        self.minusButton.clicked.connect(self.on_sub_button_clicked)
+        self.addButton.clicked.connect(self.on_add_button_clicked)
+        self.baseLabel.setAlignment(Qt.AlignCenter)
+
+    def on_add_button_clicked(self):
+        HardWareController.add_base()
+        self.baseLabel.setText(str(HardWareController.base))
+
+    def on_sub_button_clicked(self):
+        HardWareController.minus_base()
+        self.baseLabel.setText(str(HardWareController.base))
+
     def refresh_song_list(self):
         list_widget = self.listWidget
         list_widget.clear()

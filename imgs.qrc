@@ -12,5 +12,7 @@
         <file>assets/upload_selected.png</file>
         <file>assets/subWidget.png</file>
         <file>assets/ui.png</file>
+        <file>assets/minus.png</file>
+        <file>assets/plus.png</file>
     </qresource>
 </RCC>

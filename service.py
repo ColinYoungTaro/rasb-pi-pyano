@@ -1,6 +1,6 @@
 from control import HardWareController
 from PyQt5.QtWidgets import QProgressBar, QPushButton
-from note import Note
+from note import Music, Note
 from PyQt5.QtCore import QProcess, QRect, QThread
 from GlobalConfig import GlobalConfig, MusicConfig
 import os
@@ -19,19 +19,18 @@ class IO_STATE:
 class HardwareThread(QThread):
     def __init__(self) -> None:
         super().__init__()
-        self.hardware_controller = HardWareController()
-        self.state = [IO_STATE.RELEASE] * 11 
-        self.next_state = [IO_STATE.RELEASE] * 11 
 
     def run(self):
         while True:
             self.msleep(30)
 
     def press_note(self,note:Note):
-        self.hardware_controller.note_press(note)
+        HardWareController.note_press(note)
 
     def release_note(self,note:Note):
-        self.hardware_controller.note_release(note)
+        HardWareController.note_release(note)
+        self.msleep(MusicConfig.get_unit_interval_second() * 500)
+        HardWareController.note_idle(note)
             
 
 class NoteBlock(QRect):
@@ -65,7 +64,7 @@ class BlockAnimationService:
             block = NoteBlock(5 + index * 33,y,33,note_pixel)
             block.set_note(note)
             self.blocks.append(block)
-            unit_ptr += note_pixel
+            unit_ptr += note_pixel + 0.5 * GlobalConfig.interval()
 
         return self.blocks
 

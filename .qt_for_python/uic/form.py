@@ -8,9 +8,9 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+from PySide2.QtCore import *
+from PySide2.QtGui import *
+from PySide2.QtWidgets import *
 
 
 class Ui_Form(object):
@@ -22,7 +22,7 @@ class Ui_Form(object):
         self.frame.setObjectName(u"frame")
         self.frame.setGeometry(QRect(0, 0, 1024, 600))
         self.frame.setStyleSheet(u"#frame{\n"
-"	border-image:url(:/ui.png);\n"
+"	border-image:url(:/assets/ui.png);\n"
 "}")
         self.frame.setFrameShape(QFrame.StyledPanel)
         self.frame.setFrameShadow(QFrame.Raised)
@@ -93,7 +93,7 @@ class Ui_Form(object):
 "}")
         self.progressBar = QProgressBar(self.frame)
         self.progressBar.setObjectName(u"progressBar")
-        self.progressBar.setGeometry(QRect(250, 566, 571, 5))
+        self.progressBar.setGeometry(QRect(250, 566, 400, 5))
         self.progressBar.setStyleSheet(u"QProgressBar::chunk {\n"
 "   background-color: #11A4F0;\n"
 "}")
@@ -109,7 +109,7 @@ class Ui_Form(object):
 "}")
         self.uploadButton = QPushButton(self.frame)
         self.uploadButton.setObjectName(u"uploadButton")
-        self.uploadButton.setGeometry(QRect(870, 528, 48, 48))
+        self.uploadButton.setGeometry(QRect(690, 528, 48, 48))
         self.uploadButton.setStyleSheet(u"#uploadButton{\n"
 "	background-color:transparent;\n"
 "	border-image:url(:/assets/upload_idle.png);\n"
@@ -119,6 +119,33 @@ class Ui_Form(object):
 "	background-color:transparent;\n"
 "	border-image:url(:/assets/upload_selected.png)\n"
 "}")
+        self.baseLabel = QLabel(self.frame)
+        self.baseLabel.setObjectName(u"baseLabel")
+        self.baseLabel.setGeometry(QRect(900, 539, 31, 31))
+        self.baseLabel.setStyleSheet(u"\n"
+"font-family:'consolas','\u7b49\u7ebf';\n"
+"font-size:25px;\n"
+"color:white;\n"
+"text-align:center\n"
+"")
+        self.addButton = QPushButton(self.frame)
+        self.addButton.setObjectName(u"addButton")
+        self.addButton.setGeometry(QRect(940, 539, 32, 32))
+        self.addButton.setStyleSheet(u"	background-color:transparent;\n"
+"	border-image:url(:/assets/plus.png);\n"
+"	outline:0px;")
+        self.minusButton = QPushButton(self.frame)
+        self.minusButton.setObjectName(u"minusButton")
+        self.minusButton.setGeometry(QRect(861, 539, 32, 32))
+        self.minusButton.setStyleSheet(u"	background-color:transparent;\n"
+"	border-image:url(:/assets/minus.png);\n"
+"	outline:0px;")
+        self.songLabel_3 = QLabel(self.frame)
+        self.songLabel_3.setObjectName(u"songLabel_3")
+        self.songLabel_3.setGeometry(QRect(790, 537, 61, 31))
+        self.songLabel_3.setStyleSheet(u"	font-family:'consolas','\u7b49\u7ebf';\n"
+"	font-size:25px;\n"
+"	color:white;")
 
         self.retranslateUi(Form)
 
@@ -141,5 +168,9 @@ class Ui_Form(object):
         self.prevButton.setText("")
         self.songLabel.setText(QCoreApplication.translate("Form", u"\u6b4c\u540d", None))
         self.uploadButton.setText("")
+        self.baseLabel.setText(QCoreApplication.translate("Form", u"5", None))
+        self.addButton.setText("")
+        self.minusButton.setText("")
+        self.songLabel_3.setText(QCoreApplication.translate("Form", u"\u504f\u79fb", None))
     # retranslateUi
 
