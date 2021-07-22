@@ -1,5 +1,6 @@
 
-from service import CameraService, PlayerService
+from predictor import Predictor
+from service import CameraService, PlayerService, PredictorServiceInstance
 from PyQt5 import QtCore, QtGui
 import PyQt5
 from PyQt5.QtWidgets import QDialog
@@ -119,7 +120,10 @@ class CameraInitThread(QtCore.QThread):
         self.is_running = True
 
     def run(self):
+        pd = PredictorServiceInstance().get_pd()
+        
         self.vc = cv2.VideoCapture(0)
+        
         print("ready")
         self.ready_signal.emit("ready")
         while True:
@@ -141,6 +145,7 @@ class UploadThread(QtCore.QThread):
     def __init__(self) -> None:
         super(UploadThread,self).__init__()
         self.upload_service = CameraService()
+        # self.upload_service.init_pd()
         self.name = ""
 
     def set_name(self,name):

@@ -170,9 +170,8 @@ class CameraService:
 
     def on_load(self,name,img):
         # 在这里识别
-        img = cv2.resize(img,(1280,720))
+        # img = cv2.resize(img,(1280,720))
         pd = Predictor()
-        
         cv2.imwrite('./cache/img.png',img)
         try:
             note,pitch,dur = pd.predict("./cache/img.png", "", "", 0.43, 0, 100)
@@ -182,4 +181,24 @@ class CameraService:
         notes = Note.convert_from_predicted_list(note,pitch,dur)
         Note.music_save(name,notes)
         return 0
+
+
+class Singleton(object):
+    def __init__(self, cls):
+        self._cls = cls
+        self._instance = {}
+    def __call__(self):
+        if self._cls not in self._instance:
+            self._instance[self._cls] = self._cls()
+        return self._instance[self._cls]
+
+@Singleton
+class PredictorServiceInstance:
+    def __init__(self):
+        self.pd = Predictor()
+        print("predictor loaded")
+
+    def get_pd(self)->Predictor:
+        return self.pd
+
         
