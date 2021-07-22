@@ -1,6 +1,6 @@
 from note import Note
 import numpy
-# import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 import time
 
 # finger 的IO接口
@@ -25,6 +25,7 @@ class HardWareController:
         for i in FINGER:
             GPIO.setup(i,GPIO.OUT,initial=GPIO.LOW)
             HardWareController.PWM.append(GPIO.PWM(i,freq))
+            print("init ready")
         for index,pwm in enumerate(HardWareController.PWM):
             pwm.start(0)
     
@@ -52,15 +53,15 @@ class HardWareController:
             return note - HardWareController.base + 2
         else:
             return 10 
+    
+    def note_press(note:int):
+        HardWareController.PWM[HardWareController.note2finger(note)].ChangeDutyCycle(press[HardWareController.note2finger(note)])
 
-    def note_press(note:Note):
-        HardWareController.PWM[HardWareController.note2finger(note.abs_int_note)].ChangeDutyCycle(press[HardWareController.note2finger(note.abs_int_note)])
+    def note_release(note:int):
+        HardWareController.PWM[HardWareController.note2finger(note)].ChangeDutyCycle(back[HardWareController.note2finger(note)])
 
-    def note_release(note:Note):
-        HardWareController.PWM[HardWareController.note2finger(note.abs_int_note)].ChangeDutyCycle(back[HardWareController.note2finger(note.abs_int_note)])
-
-    def note_idle(note:Note):
-        HardWareController.PWM[HardWareController.note2finger(note.abs_int_note)].ChangeDutyCycle(0)
+    def note_idle(note:int):
+        HardWareController.PWM[HardWareController.note2finger(note)].ChangeDutyCycle(0)
 
     # 析构函数
     def dispose():

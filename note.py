@@ -23,7 +23,7 @@ class Note:
     def convert_from_predicted_list(lst_note,lst_pitch,lst_dur):
         note_list = []
         for i in range(len(lst_note)):
-            note : Note = Note(lst_note[i],lst_pitch[i],lst_dur[i])
+            note : Note = Note(lst_note[i],lst_pitch[i],1/2**(lst_dur[i]-1))
             if len(note_list) > 0 and note.abs_int_note == note_list[len(note_list)-1].abs_int_note:
                 note_list[len(note_list)-1].duration += note.duration
             else:

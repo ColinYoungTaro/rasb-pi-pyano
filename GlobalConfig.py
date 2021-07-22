@@ -6,7 +6,7 @@ class Resourse:
 
 class GlobalConfig:
     dt = 50
-    unit_height = 60
+    unit_height = 120
     
     white_piano_width = 33
     white_piano_height = 100

@@ -12,25 +12,42 @@ class BlockState:
     TOUCHING = 1
     LEFT = 2
 
-class IO_STATE:
+class IO_COMMAND:
     PRESS = 1
     RELEASE = 0
+
+class IO_EVENT:
+    def __init__(self,cmd:IO_COMMAND,note:int) -> None:
+        self.cmd = cmd
+        self.abs_note_num = note 
 
 class HardwareThread(QThread):
     def __init__(self) -> None:
         super().__init__()
+        self.event_list = []
 
     def run(self):
         while True:
-            self.msleep(30)
+            if len(self.event_list) > 0:
+                event = self.event_list[0]
+                
+                event:IO_EVENT
+                if event.cmd == IO_COMMAND.PRESS:
+                    HardWareController.note_press(event.abs_note_num)
+                elif event.cmd == IO_COMMAND.RELEASE:
+                    HardWareController.note_release(event.abs_note_num)
+                    self.msleep(MusicConfig.get_unit_interval_second() * 500)
+                    HardWareController.note_idle(event.abs_note_num)
+                self.event_list.pop(0)
+            else:
+                self.msleep(30)
 
     def press_note(self,note:Note):
-        HardWareController.note_press(note)
+        self.event_list.append(IO_EVENT(IO_COMMAND.PRESS,note.abs_int_note))
 
     def release_note(self,note:Note):
-        HardWareController.note_release(note)
-        self.msleep(MusicConfig.get_unit_interval_second() * 500)
-        HardWareController.note_idle(note)
+        self.event_list.append(IO_EVENT(IO_COMMAND.RELEASE,note.abs_int_note))
+
             
 
 class NoteBlock(QRect):
@@ -78,12 +95,12 @@ class BlockAnimationService:
         return  int(100 * self.progress / len(self.blocks))
 
     def on_note_rect_touch(self,blk:NoteBlock):
-        print(f"{blk.note} 按下")
+        # print(f"{blk.note} 按下")
         self.progress += 1
         self.hardware_thread.press_note(blk.note)
         
     def on_note_rect_leave(self,blk:NoteBlock):
-        print(f"{blk.note} 抬起")
+        # print(f"{blk.note} 抬起")
         self.hardware_thread.release_note(blk.note)
 
 
