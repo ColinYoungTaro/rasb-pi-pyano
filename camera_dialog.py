@@ -26,10 +26,11 @@ class Dialog(SubDialog):
 class CameraDialog(QDialog):
 
     def __init__(self,parent=None) -> None:
-        super().__init__(parent=parent)
+        super().__init__()
         self.ui = Dialog()
         self.ui.setupUi(self)
         self.load_listener = None 
+        self.parent = parent
         self.init_components()
         self.init_threads()
 
@@ -71,8 +72,6 @@ class CameraDialog(QDialog):
         #self.frame_timer.stop()
 
     def on_cancel_clicked(self):
-        self.camera_thread.terminate()
-        self.upload_thread.terminate()
         self.close()
 
     def on_camera_signal(self,info):
@@ -90,10 +89,10 @@ class CameraDialog(QDialog):
 
     def on_upload_signal(self,info):
         if info == 'finished':
-            print(PlayerService().get_song_list())
-            if self.load_listener is not None:
-                self.load_listener()
-            self.on_cancel_clicked()
+            if self.parent is not None and hasattr(self.parent,'refresh_song_list'):
+                self.parent.refresh_song_list()
+            # self.on_cancel_clicked()
+            self.ui.success_msg("识别完成")
 
         elif info == 'failed':
             self.ui.error_msg("找不到简谱，请重新拍照")
@@ -109,6 +108,7 @@ class CameraDialog(QDialog):
     def set_load_listener(self,listener):
         self.load_listener = listener
 
+
 class CameraInitThread(QtCore.QThread):
 
     ready_signal = QtCore.pyqtSignal(str)
@@ -118,15 +118,14 @@ class CameraInitThread(QtCore.QThread):
         self.vc = None
         self.img = None 
         self.is_running = True
+        self.video_running = True
 
     def run(self):
-        pd = PredictorServiceInstance().get_pd()
-        
-        self.vc = cv2.VideoCapture(0)
+        self.vc = cv2.VideoCapture(-1)
         
         print("ready")
         self.ready_signal.emit("ready")
-        while True:
+        while self.video_running:
             if self.is_running:
                 rval, frame = self.vc.read()
                 self.img = frame
@@ -138,6 +137,9 @@ class CameraInitThread(QtCore.QThread):
 
     def click(self):
         self.is_running = not self.is_running
+
+    def exit(self):
+        self.video_running = False
 
 
 class UploadThread(QtCore.QThread):

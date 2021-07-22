@@ -6,7 +6,7 @@ class Resourse:
 
 class GlobalConfig:
     dt = 50
-    unit_height = 120
+    unit_height = 240
     
     white_piano_width = 33
     white_piano_height = 100
@@ -25,7 +25,7 @@ class GlobalConfig:
         return 0.6 * GlobalConfig.unit_height
 
 class MusicConfig:
-    tempo = 100
+    tempo = 80
     prefix = "./chords"
 
     @staticmethod

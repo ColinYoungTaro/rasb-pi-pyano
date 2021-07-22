@@ -251,7 +251,7 @@ class UIWindow(Window):
         self.on_load_song(self.player_service.get_current_song())
 
     def on_upload_clicked(self):
-        self.dialog = CameraDialog()
+        self.dialog = CameraDialog(self)
         self.dialog.set_load_listener(self.refresh_song_list)
 
 

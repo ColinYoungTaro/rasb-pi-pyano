@@ -73,7 +73,10 @@ class BlockAnimationService:
             if note.abs_int_note == -1:
                 continue
             index = note.abs_int_note - 1
-            note_pixel = note.duration * GlobalConfig.unit_height
+            if note.duration > 0:
+                note_pixel = 1/(2**(note.duration-1))* GlobalConfig.unit_height
+            else:
+                continue
             if index < 0: 
                 unit_ptr += note_pixel
                 continue
@@ -133,7 +136,7 @@ class PlayerService:
 
     def get_song_list(self):
         self.song_list = os.listdir(MusicConfig.prefix)
-        return os.listdir(MusicConfig.prefix)
+        return self.song_list
 
     def get_play_state(self):
         return self.is_playing
@@ -171,13 +174,14 @@ class CameraService:
     def on_load(self,name,img):
         # 在这里识别
         # img = cv2.resize(img,(1280,720))
-        pd = Predictor()
+        pd = PredictorServiceInstance().get_pd()
+        print("pd created")
         cv2.imwrite('./cache/img.png',img)
+        print("img wrote")
         try:
             note,pitch,dur = pd.predict("./cache/img.png", "", "", 0.43, 0, 100)
         except ValueError:
             return -1 # 错误码
-
         notes = Note.convert_from_predicted_list(note,pitch,dur)
         Note.music_save(name,notes)
         return 0

@@ -23,23 +23,16 @@ class Note:
     def convert_from_predicted_list(lst_note,lst_pitch,lst_dur):
         note_list = []
         for i in range(len(lst_note)):
-            note = None 
-            if len(note_list) > 0:
-                if lst_dur[i] == 0:
-                    continue
-                note : Note = Note(lst_note[i],lst_pitch[i],1/2**(lst_dur[i]-1))
-                if note.abs_int_note == note_list[len(note_list)-1].abs_int_note:
-                    note_list[len(note_list)-1].duration += note.duration
-                else:
-                    note_list.append(note)
+            note : Note = Note(lst_note[i],lst_pitch[i],lst_dur[i])
+            note_list.append(note)
 
         return note_list
 
     @staticmethod
     def music_save(music_name,note_list):
         path_name = os.path.join(MusicConfig.prefix,music_name)
-        if os.path.exists(path_name):
-            raise Exception("File had exists")
+        # if os.path.exists(path_name):
+        #     raise Exception("File had exists")
         
         file = open(path_name,'w')
         for note in note_list:

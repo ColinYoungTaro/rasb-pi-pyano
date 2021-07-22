@@ -9,8 +9,7 @@ FINGER = [29,31,33,35,37,12,16,18,22,32,40]
 s = [x for x in range(1,10)]
 # PWM freq
 freq = 50
-# music tempo
-tempo = 80
+
 vp = 8  # v positive
 vn = 7  # v negative
 press = [7.5,7.2 ,7   ,9   ,8.25,7.5,7   ,7   ,8   ,7.25,7.5]
