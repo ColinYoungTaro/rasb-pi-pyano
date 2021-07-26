@@ -26,6 +26,9 @@ class HardwareThread(QThread):
         super().__init__()
         self.event_list = []
 
+    def is_idle(self):
+        return len(self.event_list) == 0
+
     def run(self):
         while True:
             if len(self.event_list) > 0:
@@ -106,6 +109,11 @@ class BlockAnimationService:
         # print(f"{blk.note} 抬起")
         self.hardware_thread.release_note(blk.note)
 
+    def hardware_is_idle(self):
+        if self.hardware_thread:
+            return self.hardware_thread.is_idle()
+        else:
+            return False
 
     def on_init(self):
         pass 

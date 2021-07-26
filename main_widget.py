@@ -108,6 +108,8 @@ class AnimationCanvas(QLabel):
     def update_blocks_position(self,blocks):
         for index,block in enumerate(blocks):
             block : NoteBlock
+            if block.state == BlockState.LEFT:
+                continue
             block.moveTop(int(block.y() + GlobalConfig.drop_speed_pixels_per_frame()))
             if block.state == BlockState.FLOAT:
                 if block.bottom() > 400:
@@ -128,9 +130,10 @@ class AnimationCanvas(QLabel):
                         self.piano.update()
                     
     def on_frame_update(self):
-        self.update_blocks_position(self.blocks)
-        self.update()
-        self.frame_timer.start()
+        if self.service.hardware_is_idle():
+            self.update_blocks_position(self.blocks)
+            self.update()
+            self.frame_timer.start()
 
     def paintEvent(self, event: QtGui.QPaintEvent) -> None:
         buffer_painter = QPainter()
