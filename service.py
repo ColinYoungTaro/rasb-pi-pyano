@@ -215,7 +215,7 @@ class CameraService:
 @Singleton
 class PredictorServiceInstance:
     def __init__(self):
-        self.pd = None# Predictor()
+        self.pd = Predictor()
         print("predictor loaded")
 
     def get_pd(self)->Predictor:
