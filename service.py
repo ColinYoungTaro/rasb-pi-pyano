@@ -206,7 +206,13 @@ class CameraService:
         except ValueError:
             return -1 # 错误码
         notes = Note.convert_from_predicted_list(note,pitch,dur)
-        Note.music_save(name,notes)
+        min_base = 99999
+        for note in notes:
+            note:Note
+            if note.abs_int_note > 0 :
+                min_base = min(min_base,note.abs_int_note)
+        
+        Note.music_save(name,notes,min_base)
         return 0
 
 

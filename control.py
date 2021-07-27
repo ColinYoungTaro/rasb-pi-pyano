@@ -69,7 +69,7 @@ class HardWareController:
 
     def move_base(base:int):
         print("move start")
-        time.sleep(5)
+        #time.sleep(5)
         print("move end")
 
 

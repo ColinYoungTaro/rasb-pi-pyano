@@ -127,8 +127,6 @@ class AnimationCanvas(QLabel):
                     if self.piano:
                         self.piano.press(block.note.abs_int_note)
                         self.piano.update()
-                    if self.related_progress_bar:
-                        self.related_progress_bar.setValue(self.service.get_progress())
 
             elif block.state == BlockState.TOUCHING:
                 if block.top() > 400:
@@ -137,7 +135,9 @@ class AnimationCanvas(QLabel):
                     if self.piano:
                         self.piano.release(block.note.abs_int_note)
                         self.piano.update()
-                    self.rest = self.rest - 1
+                    if self.related_progress_bar:
+                        self.related_progress_bar.setValue(self.service.get_progress())
+
                     if self.service.get_progress() == 100:
                         self.progress_signal.emit("over")
 
@@ -262,13 +262,11 @@ class UIWindow(Window):
     # selected interface 
     def on_item_clicked(self,text):
         if self.is_idle():
+            self.wait_moving()
             self.player_service.select_song(text)
             self.piano_canvas.release_all()
             self.on_load_song(text)
-            self.on_pause()
-            self.wait_moving()
             self.hardwareTipLabel.setText(GlobalConfig.hardware_tip_content)
-
 
     def on_load_song(self,name):
         self.animation_content.load_song(name)
@@ -326,9 +324,8 @@ class UIWindow(Window):
 
     def animation_controller(self,info):
         if info == "over":
-            self.on_item_clicked(self.player_service.get_current_song())
-
-
+            # self.on_item_clicked(self.player_service.get_current_song())
+            self.on_pause()
 
 
 # 单独分离UI层和事件层
