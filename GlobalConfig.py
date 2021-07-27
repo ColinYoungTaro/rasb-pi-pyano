@@ -8,6 +8,8 @@ class GlobalConfig:
     dt = 50
     unit_height = 240
     
+    hardware_tip_content = '''<html><head/><body><p><span style=" color:#ffffff; font-size:20px; font-family:等线 ">机械臂准备中，请稍后...</span></p></body></html>'''
+
     white_piano_width = 33
     white_piano_height = 100
     black_piano_width = 20 

@@ -151,6 +151,9 @@ class Ui_Form(object):
 "    font-size:25px;\n"
 "    color:white;")
         self.songLabel_3.setObjectName("songLabel_3")
+        self.hardwareTipLabel = QtWidgets.QLabel(self.frame)
+        self.hardwareTipLabel.setGeometry(QtCore.QRect(240, 220, 231, 61))
+        self.hardwareTipLabel.setObjectName("hardwareTipLabel")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -168,3 +171,4 @@ class Ui_Form(object):
         self.songLabel.setText(_translate("Form", "歌名"))
         self.baseLabel.setText(_translate("Form", "5"))
         self.songLabel_3.setText(_translate("Form", "偏移"))
+        self.hardwareTipLabel.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#ffffff; font-size:20px; font-family:等线 \">机械臂准备中，请稍后...</span></p></body></html>"))

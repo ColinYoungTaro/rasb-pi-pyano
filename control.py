@@ -1,3 +1,4 @@
+from singleton import Singleton
 from note import Note
 import numpy
 import RPi.GPIO as GPIO
@@ -14,6 +15,8 @@ vp = 8  # v positive
 vn = 7  # v negative
 press = [7.5,7.2 ,7   ,9   ,8.25,7.5,7   ,7   ,8   ,7.25,7.5]
 back =  [7.5,8.5 ,8   ,7.5 ,7   ,7.5,8   ,7.75,7.05,6.25,7.5]
+
+
 
 class HardWareController:
     # 初始化弹琴机械臂的IO口
@@ -55,17 +58,26 @@ class HardWareController:
     
     def note_press(note:int):
         HardWareController.PWM[HardWareController.note2finger(note)].ChangeDutyCycle(press[HardWareController.note2finger(note)])
-
+        #time.sleep(0.1)
+    
     def note_release(note:int):
         HardWareController.PWM[HardWareController.note2finger(note)].ChangeDutyCycle(back[HardWareController.note2finger(note)])
+        #time.sleep(0.1)
 
     def note_idle(note:int):
         HardWareController.PWM[HardWareController.note2finger(note)].ChangeDutyCycle(0)
+
+    def move_base(base:int):
+        print("move start")
+        time.sleep(5)
+        print("move end")
+
 
     # 析构函数
     def dispose():
         for pwm in HardWareController.PWM:
             pwm.stop()
         GPIO.cleanup() 
+        pass
 
 

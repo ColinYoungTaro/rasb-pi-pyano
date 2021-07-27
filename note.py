@@ -29,15 +29,17 @@ class Note:
         return note_list
 
     @staticmethod
-    def music_save(music_name,note_list):
+    def music_save(music_name,note_list,base=5):
         path_name = os.path.join(MusicConfig.prefix,music_name)
         # if os.path.exists(path_name):
         #     raise Exception("File had exists")
         
         file = open(path_name,'w')
+        file.write(str(base) + '\n')
         for note in note_list:
             note : Note
             file.write(f"{note.num}#{note.pitch}#{note.duration}\n")
+        
 
     @staticmethod
     def music_read(music_name):
@@ -49,12 +51,14 @@ class Note:
         lines = file.readlines()
         lines = [line.replace('\n','') for line in lines]
         note_list = []
-        for line in lines:
+        base = int(lines[0])
+        lines.pop(0)
+        for i,line in enumerate(lines):
             info = [int(item) for item in line.split('#')]
             if info[0] in range(0,8):
                 note_list.append(Note(info[0],info[1],info[2])) 
 
-        return note_list
+        return note_list,base
 
 
 

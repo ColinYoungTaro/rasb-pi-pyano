@@ -146,6 +146,9 @@ class Ui_Form(object):
         self.songLabel_3.setStyleSheet(u"	font-family:'consolas','\u7b49\u7ebf';\n"
 "	font-size:25px;\n"
 "	color:white;")
+        self.hardwareTipLabel = QLabel(self.frame)
+        self.hardwareTipLabel.setObjectName(u"hardwareTipLabel")
+        self.hardwareTipLabel.setGeometry(QRect(240, 220, 231, 61))
 
         self.retranslateUi(Form)
 
@@ -172,5 +175,6 @@ class Ui_Form(object):
         self.addButton.setText("")
         self.minusButton.setText("")
         self.songLabel_3.setText(QCoreApplication.translate("Form", u"\u504f\u79fb", None))
+        self.hardwareTipLabel.setText(QCoreApplication.translate("Form", u"<html><head/><body><p><span style=\" color:#ffffff; font-size:20px; font-family:\u7b49\u7ebf \">\u673a\u68b0\u81c2\u51c6\u5907\u4e2d\uff0c\u8bf7\u7a0d\u540e...</span></p></body></html>", None))
     # retranslateUi
 

@@ -291,6 +291,19 @@ text-align:center
      <string>偏移</string>
     </property>
    </widget>
+   <widget class="QLabel" name="hardwareTipLabel">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>220</y>
+      <width>231</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff; font-size:20px; font-family:等线 &quot;&gt;机械臂准备中，请稍后...&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>

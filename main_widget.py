@@ -2,14 +2,14 @@
 from control import HardWareController
 from camera_dialog import CameraDialog, Dialog
 from subWidget import Ui_Dialog
-from service import BlockAnimationService, BlockState, MusicItemService, NoteBlock, PlayerService
+from service import BlockAnimationService, BlockState, IO_COMMAND, IO_EVENT, MusicItemService, NoteBlock, PlayerService
 from note import Music, Note
 from GlobalConfig import GlobalConfig, MusicConfig
 import sys
 import typing
 from PyQt5 import QtGui
 import PyQt5
-from PyQt5.QtCore import QRect, QTime, QTimer, Qt
+from PyQt5.QtCore import QRect, QTime, QTimer, Qt, pyqtSignal
 from PyQt5.QtGui import QColor, QFont, QLinearGradient, QPaintEvent, QPainter, QPen, QPixmap
 
 from PyQt5.QtWidgets import QAbstractItemView, QApplication, QDialog, QLabel,QListWidgetItem , QMainWindow, QProgressBar, QScroller, QWidget
@@ -66,8 +66,11 @@ class PianoCanvas(QLabel):
 
 
 class AnimationCanvas(QLabel):
+
+    progress_signal = pyqtSignal(str)
+
     def __init__(self,parent: typing.Optional[PyQt5.QtWidgets.QWidget] = None) -> None:
-        super().__init__(parent)
+        super(QLabel,self).__init__(parent)
         self.setGeometry(0,0,700,500)
         self.current_time = 0
 
@@ -83,6 +86,8 @@ class AnimationCanvas(QLabel):
         self.service = BlockAnimationService()
         self.blocks = []
         self.piano = None
+        self.rest = 0
+        self.song_name = ""
 
         self.related_progress_bar = None
 
@@ -93,11 +98,15 @@ class AnimationCanvas(QLabel):
         self.piano = piano
 
     def load_song(self,song_name):
-        notes = Note.music_read(song_name)
+        self.song_name = song_name
+        notes,base = Note.music_read(song_name)
+        self.rest = len(notes)
         blocks = self.service.create_blocks(notes)
         self.blocks = blocks
         self.service.set_progress(0)
         self.service.on_init()
+        self.service.move_base(base)
+    
 
     def pause(self):
         self.frame_timer.stop()
@@ -128,12 +137,15 @@ class AnimationCanvas(QLabel):
                     if self.piano:
                         self.piano.release(block.note.abs_int_note)
                         self.piano.update()
+                    self.rest = self.rest - 1
+                    if self.service.get_progress() == 100:
+                        self.progress_signal.emit("over")
+
                     
     def on_frame_update(self):
-        if self.service.hardware_is_idle():
-            self.update_blocks_position(self.blocks)
-            self.update()
-            self.frame_timer.start()
+        self.update_blocks_position(self.blocks)
+        self.update()
+        self.frame_timer.start()
 
     def paintEvent(self, event: QtGui.QPaintEvent) -> None:
         buffer_painter = QPainter()
@@ -152,23 +164,39 @@ class AnimationCanvas(QLabel):
 # Window是QtDesigner设计的window
 # 自己添加的部分组件 通过继承Window来实现
 class UIWindow(Window):
+    class STATE:
+        IDLE = 0
+        WAIT_MOVING = 1
+
     def __init__(self) -> None:
         super().__init__()
         self.item_clicked_listener = None
         self.player_service = PlayerService()
+        self.state = self.STATE.IDLE 
         self.dialog = None
+
+    def is_idle(self):
+        return self.state == self.STATE.IDLE
+    
+    def wait_moving(self):
+        self.state = self.STATE.WAIT_MOVING
+
+    def idle(self):
+        self.state = self.STATE.IDLE
 
     # 初始化样式和基本逻辑功能
     def init_components(self):
 
         self.animation_content = AnimationCanvas(self.frame)
         self.animation_content.bind_progress_bar(self.progressBar)
+        self.animation_content.service.hardware_thread.event_finished_signal.connect(self.hardware_thread_event_handler)
+        self.animation_content.progress_signal.connect(self.animation_controller)
         self.piano_canvas = PianoCanvas(self.frame)
         self.piano_canvas.setGeometry(0,400,700,100)
         self.animation_content.bind_piano_canvas(self.piano_canvas)
         list_widget = self.listWidget
         QScroller.grabGesture(list_widget,QScroller.LeftMouseButtonGesture)
-        list_widget.itemClicked.connect(self.on_item_clicked)
+        list_widget.itemClicked.connect(lambda item :self.on_item_clicked(item.text()))
         list_widget.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         list_widget.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         list_widget.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
@@ -186,6 +214,8 @@ class UIWindow(Window):
         self.minusButton.clicked.connect(self.on_sub_button_clicked)
         self.addButton.clicked.connect(self.on_add_button_clicked)
         self.baseLabel.setAlignment(Qt.AlignCenter)
+        self.hardwareTipLabel.raise_()
+        self.hardwareTipLabel.setText("")
 
     def on_add_button_clicked(self):
         HardWareController.add_base()
@@ -230,32 +260,38 @@ class UIWindow(Window):
 
 
     # selected interface 
-    def on_item_clicked(self,item:QListWidgetItem):
-        self.player_service.select_song(item.text())
-        self.piano_canvas.release_all()
-        self.on_load_song(item.text())
-        if self.item_clicked_listener is not None:
-            self.item_clicked_listener(item)
+    def on_item_clicked(self,text):
+        if self.is_idle():
+            self.player_service.select_song(text)
+            self.piano_canvas.release_all()
+            self.on_load_song(text)
+            self.on_pause()
+            self.wait_moving()
+            self.hardwareTipLabel.setText(GlobalConfig.hardware_tip_content)
+
 
     def on_load_song(self,name):
         self.animation_content.load_song(name)
         self.songLabel.setText(name)
-        self.on_play()
+        # self.on_play()
 
     def set_item_clicked_listener(self,func):
         self.item_clicked_listener = func
 
     def on_next_clicked(self):
-        self.player_service.on_next() 
-        self.on_load_song(self.player_service.get_current_song())
+        if self.is_idle():
+            self.player_service.on_next() 
+            self.on_load_song(self.player_service.get_current_song())
 
     def on_prev_clicked(self):
-        self.player_service.on_prev()
-        self.on_load_song(self.player_service.get_current_song())
+        if self.is_idle():
+            self.player_service.on_prev()
+            self.on_load_song(self.player_service.get_current_song())
 
     def on_upload_clicked(self):
-        self.dialog = CameraDialog(self)
-        self.dialog.set_load_listener(self.refresh_song_list)
+        if self.is_idle():
+            self.dialog = CameraDialog(self)
+            self.dialog.set_load_listener(self.refresh_song_list)
 
 
     def on_play(self):
@@ -272,16 +308,25 @@ class UIWindow(Window):
 
 
     def on_play_clicked(self):
-        # print(self.player_service.get_current_song())
-        if self.player_service.get_current_song():
-            state = self.player_service.get_play_state()
-            if state:
-                self.on_pause()
-            else:
-                self.on_play()
+        if self.is_idle():
+            # print(self.player_service.get_current_song())
+            if self.player_service.get_current_song():
+                state = self.player_service.get_play_state()
+                if state:
+                    self.on_pause()
+                else:
+                    self.on_play()
 
-            
-        
+    def hardware_thread_event_handler(self,event:int):
+        # 当move移动完毕的时候告诉主线程完毕
+        if event == IO_COMMAND.MOVE:
+            self.idle()
+            self.on_play()
+            self.hardwareTipLabel.setText("")
+
+    def animation_controller(self,info):
+        if info == "over":
+            self.on_item_clicked(self.player_service.get_current_song())
 
 
 
@@ -294,13 +339,6 @@ class UIWidget(QWidget):
         self.ui = UIWindow()
         self.ui.setupUi(self)
         self.ui.init_components()
-        self.ui.set_item_clicked_listener(self.on_item_clicked)
-        
-
-
-    def on_item_clicked(self,item:QListWidgetItem):
-        pass 
-        #dialog = CameraDialog()
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
         HardWareController.dispose()
