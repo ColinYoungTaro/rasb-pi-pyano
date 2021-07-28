@@ -211,12 +211,9 @@ class CameraService:
             note:Note
             if note.abs_int_note > 0 :
                 min_base = min(min_base,note.abs_int_note)
-        
+        print(min_base)
         Note.music_save(name,notes,min_base)
         return 0
-
-
-
 
 @Singleton
 class PredictorServiceInstance:

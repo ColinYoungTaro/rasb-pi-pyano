@@ -262,11 +262,16 @@ class UIWindow(Window):
     # selected interface 
     def on_item_clicked(self,text):
         if self.is_idle():
+            self.select_song_by_name(text)
             self.wait_moving()
-            self.player_service.select_song(text)
-            self.piano_canvas.release_all()
-            self.on_load_song(text)
-            self.hardwareTipLabel.setText(GlobalConfig.hardware_tip_content)
+            
+
+    def select_song_by_name(self,text):
+        self.player_service.select_song(text)
+        self.piano_canvas.release_all()
+        self.on_load_song(text)
+        self.hardwareTipLabel.setText(GlobalConfig.hardware_tip_content)
+        self.on_pause()
 
     def on_load_song(self,name):
         self.animation_content.load_song(name)
