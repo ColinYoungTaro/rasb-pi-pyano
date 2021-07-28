@@ -211,19 +211,10 @@ class UIWindow(Window):
 
         self.button_style_pause()
 
-        self.minusButton.clicked.connect(self.on_sub_button_clicked)
-        self.addButton.clicked.connect(self.on_add_button_clicked)
+
         self.baseLabel.setAlignment(Qt.AlignCenter)
         self.hardwareTipLabel.raise_()
         self.hardwareTipLabel.setText("")
-
-    def on_add_button_clicked(self):
-        HardWareController.add_base()
-        self.baseLabel.setText(str(HardWareController.base))
-
-    def on_sub_button_clicked(self):
-        HardWareController.minus_base()
-        self.baseLabel.setText(str(HardWareController.base))
 
     def refresh_song_list(self):
         list_widget = self.listWidget

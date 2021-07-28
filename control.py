@@ -23,7 +23,7 @@ Driver_Freq = 1e4
 class HardWareController:
     # 初始化弹琴机械臂&driver的IO口
     PWM = []
-    base = 5
+    base = 8
     def init():
         GPIO.setmode(GPIO.BOARD)
         for i in FINGER:
@@ -80,11 +80,12 @@ class HardWareController:
 
     def move_base(base:int):
         print("move start")
-
-        # print(HardWareController.last_base, base)
-        # HardWareController.move_hand(last_base=HardWareController.last_base, base=base)
-        # HardWareController.last_base = base
-        time.sleep(2)
+        
+        print(HardWareController.base, base)
+        HardWareController.move_hand(last_base=HardWareController.base, base=base)
+        HardWareController.set_base(base)
+        
+        # time.sleep(2)
         print("move end")
 
     def move_hand(last_base:int, base:int):
@@ -102,7 +103,7 @@ class HardWareController:
     def dispose():
         for pwm in HardWareController.PWM:
             pwm.stop()
-        HardWareController.move_hand(last_base=HardWareController.last_base, base=8)
+        HardWareController.move_hand(last_base=HardWareController.base, base=8)
         HardWareController.PWM_PUL.stop()
         GPIO.cleanup() 
         pass

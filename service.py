@@ -89,7 +89,7 @@ class BlockAnimationService:
                 continue
             index = note.abs_int_note - 1
             if note.duration > 0:
-                note_pixel = 1/(2**(note.duration-1))* GlobalConfig.unit_height
+                note_pixel = (note.duration) * GlobalConfig.unit_height
             else:
                 continue
             if index < 0: 
