@@ -119,33 +119,6 @@ class Ui_Form(object):
 "	background-color:transparent;\n"
 "	border-image:url(:/assets/upload_selected.png)\n"
 "}")
-        self.baseLabel = QLabel(self.frame)
-        self.baseLabel.setObjectName(u"baseLabel")
-        self.baseLabel.setGeometry(QRect(900, 539, 31, 31))
-        self.baseLabel.setStyleSheet(u"\n"
-"font-family:'consolas','\u7b49\u7ebf';\n"
-"font-size:25px;\n"
-"color:white;\n"
-"text-align:center\n"
-"")
-        self.addButton = QPushButton(self.frame)
-        self.addButton.setObjectName(u"addButton")
-        self.addButton.setGeometry(QRect(940, 539, 32, 32))
-        self.addButton.setStyleSheet(u"	background-color:transparent;\n"
-"	border-image:url(:/assets/plus.png);\n"
-"	outline:0px;")
-        self.minusButton = QPushButton(self.frame)
-        self.minusButton.setObjectName(u"minusButton")
-        self.minusButton.setGeometry(QRect(861, 539, 32, 32))
-        self.minusButton.setStyleSheet(u"	background-color:transparent;\n"
-"	border-image:url(:/assets/minus.png);\n"
-"	outline:0px;")
-        self.songLabel_3 = QLabel(self.frame)
-        self.songLabel_3.setObjectName(u"songLabel_3")
-        self.songLabel_3.setGeometry(QRect(790, 537, 61, 31))
-        self.songLabel_3.setStyleSheet(u"	font-family:'consolas','\u7b49\u7ebf';\n"
-"	font-size:25px;\n"
-"	color:white;")
         self.hardwareTipLabel = QLabel(self.frame)
         self.hardwareTipLabel.setObjectName(u"hardwareTipLabel")
         self.hardwareTipLabel.setGeometry(QRect(240, 220, 231, 61))
@@ -171,10 +144,6 @@ class Ui_Form(object):
         self.prevButton.setText("")
         self.songLabel.setText(QCoreApplication.translate("Form", u"\u6b4c\u540d", None))
         self.uploadButton.setText("")
-        self.baseLabel.setText(QCoreApplication.translate("Form", u"5", None))
-        self.addButton.setText("")
-        self.minusButton.setText("")
-        self.songLabel_3.setText(QCoreApplication.translate("Form", u"\u504f\u79fb", None))
         self.hardwareTipLabel.setText(QCoreApplication.translate("Form", u"<html><head/><body><p><span style=\" color:#ffffff; font-size:20px; font-family:\u7b49\u7ebf \">\u673a\u68b0\u81c2\u51c6\u5907\u4e2d\uff0c\u8bf7\u7a0d\u540e...</span></p></body></html>", None))
     # retranslateUi
 

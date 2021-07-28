@@ -122,35 +122,6 @@ class Ui_Form(object):
 "}")
         self.uploadButton.setText("")
         self.uploadButton.setObjectName("uploadButton")
-        self.baseLabel = QtWidgets.QLabel(self.frame)
-        self.baseLabel.setGeometry(QtCore.QRect(900, 539, 31, 31))
-        self.baseLabel.setStyleSheet("\n"
-"font-family:\'consolas\',\'等线\';\n"
-"font-size:25px;\n"
-"color:white;\n"
-"text-align:center\n"
-"")
-        self.baseLabel.setObjectName("baseLabel")
-        self.addButton = QtWidgets.QPushButton(self.frame)
-        self.addButton.setGeometry(QtCore.QRect(940, 539, 32, 32))
-        self.addButton.setStyleSheet("    background-color:transparent;\n"
-"    border-image:url(:/assets/plus.png);\n"
-"    outline:0px;")
-        self.addButton.setText("")
-        self.addButton.setObjectName("addButton")
-        self.minusButton = QtWidgets.QPushButton(self.frame)
-        self.minusButton.setGeometry(QtCore.QRect(861, 539, 32, 32))
-        self.minusButton.setStyleSheet("    background-color:transparent;\n"
-"    border-image:url(:/assets/minus.png);\n"
-"    outline:0px;")
-        self.minusButton.setText("")
-        self.minusButton.setObjectName("minusButton")
-        self.songLabel_3 = QtWidgets.QLabel(self.frame)
-        self.songLabel_3.setGeometry(QtCore.QRect(790, 537, 61, 31))
-        self.songLabel_3.setStyleSheet("    font-family:\'consolas\',\'等线\';\n"
-"    font-size:25px;\n"
-"    color:white;")
-        self.songLabel_3.setObjectName("songLabel_3")
         self.hardwareTipLabel = QtWidgets.QLabel(self.frame)
         self.hardwareTipLabel.setGeometry(QtCore.QRect(240, 220, 231, 61))
         self.hardwareTipLabel.setObjectName("hardwareTipLabel")
@@ -169,6 +140,4 @@ class Ui_Form(object):
         item.setText(_translate("Form", "you"))
         self.listWidget.setSortingEnabled(__sortingEnabled)
         self.songLabel.setText(_translate("Form", "歌名"))
-        self.baseLabel.setText(_translate("Form", "5"))
-        self.songLabel_3.setText(_translate("Form", "偏移"))
         self.hardwareTipLabel.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#ffffff; font-size:20px; font-family:等线 \">机械臂准备中，请稍后...</span></p></body></html>"))
