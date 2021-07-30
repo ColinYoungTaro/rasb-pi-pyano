@@ -71,8 +71,15 @@ class CameraDialog(QDialog):
             self.ui.buttonOk.setText("确定" if self.camera_thread.is_running else "重拍") 
         #self.frame_timer.stop()
 
+    
+
     def on_cancel_clicked(self):
         self.close()
+
+    def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
+        self.camera_thread.exit()
+        self.accept()
+
 
     def on_camera_signal(self,info):
         
@@ -139,6 +146,7 @@ class CameraInitThread(QtCore.QThread):
         self.is_running = not self.is_running
 
     def exit(self):
+        self.vc.release()
         self.video_running = False
 
 

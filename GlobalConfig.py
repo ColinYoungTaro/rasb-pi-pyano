@@ -27,7 +27,7 @@ class GlobalConfig:
         return 0.6 * GlobalConfig.unit_height
 
 class MusicConfig:
-    tempo = 100
+    tempo = 60
     prefix = "./chords"
 
     @staticmethod

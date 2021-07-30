@@ -38,7 +38,7 @@ class Note:
         file.write(str(base) + '\n')
         for note in note_list:
             note : Note
-            dur = note.duration if note.duration >= 3 else 2
+            dur = note.duration if note.duration < 3 else 2
             file.write(f"{note.num}#{note.pitch}#{dur}\n")
         
 
@@ -59,9 +59,11 @@ class Note:
             if info[0] in range(0,8):
                 note_list.append(Note(info[0],info[1],1/(2**(info[2]-1))))
             elif info[0] == 9:
-                note_list[len(note_list)-1].duration *= 1.5
+                if len(note_list) > 0:
+                    note_list[len(note_list)-1].duration *= 1.5
             elif info[0] == 10:
-                note_list[len(note_list)-1].duration += 1
+                if len(note_list) > 0:
+                    note_list[len(note_list)-1].duration += 1
 
 
         return note_list,base

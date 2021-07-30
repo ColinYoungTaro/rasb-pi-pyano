@@ -18,6 +18,7 @@ class IO_COMMAND:
     PRESS = 1
     RELEASE = 0
     MOVE = 2
+    PAUSE = 3
 
 class IO_EVENT:
     def __init__(self,cmd:IO_COMMAND,arg:int) -> None:
@@ -30,13 +31,15 @@ class HardwareThread(QThread):
     def __init__(self) -> None:
         super(QThread,self).__init__()
         self.event_list = []
+        self.pause = False
 
     def is_idle(self):
         return len(self.event_list) == 0
 
     def run(self):
         while True:
-            if len(self.event_list) > 0:
+
+            if not self.pause and len(self.event_list) > 0:
                 event = self.event_list[0]
                 event:IO_EVENT
 
@@ -49,6 +52,10 @@ class HardwareThread(QThread):
                 elif event.cmd == IO_COMMAND.MOVE:
                     HardWareController.move_base(event.arg)
                     # TODO 添加移动事件处理
+                elif event.cmd == IO_COMMAND.PAUSE:
+                    HardWareController.idle_all()
+                    self.pause = True
+
                 self.event_finished_signal.emit(event.cmd)
                 self.event_list.pop(0)
             else:
@@ -63,7 +70,8 @@ class HardwareThread(QThread):
     def move_base(self,base):
         self.event_list.append(IO_EVENT(IO_COMMAND.MOVE,base))
 
-            
+    def pause(self):
+        self.event_list.append(IO_EVENT(IO_COMMAND.PAUSE))
 
 class NoteBlock(QRect):
     def __init__(self,*args, **kwargs) -> None:
@@ -134,6 +142,9 @@ class BlockAnimationService:
     def on_init(self):
         pass 
 
+    def pause(self):
+        self.hardware_thread.pause()
+
 
 class MusicItemService:
     def __init__(self) -> None:
@@ -159,6 +170,8 @@ class PlayerService:
 
     def get_song_list(self):
         self.song_list = os.listdir(MusicConfig.prefix)
+        for i,s in enumerate(self.song_list):
+            self.id_hash[s] = i
         return self.song_list
 
     def get_play_state(self):

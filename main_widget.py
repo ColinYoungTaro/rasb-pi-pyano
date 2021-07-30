@@ -211,8 +211,6 @@ class UIWindow(Window):
 
         self.button_style_pause()
 
-
-        self.baseLabel.setAlignment(Qt.AlignCenter)
         self.hardwareTipLabel.raise_()
         self.hardwareTipLabel.setText("")
 
